@@ -1,0 +1,59 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="ocupacion">
+            <h2><span>Ocupacion</span> {{ocupacion.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Valor</span></dt>
+                <dd>
+                    <span>{{ocupacion.valor}}</span>
+                </dd>
+                <dt><span>Created</span></dt>
+                <dd>
+                    <span>{{ocupacion.created}}</span>
+                </dd>
+                <dt><span>Updated</span></dt>
+                <dd>
+                    <span>{{ocupacion.updated}}</span>
+                </dd>
+                <dt><span>Ticket</span></dt>
+                <dd>
+                    <div *ngIf="ocupacion.ticket">
+                        <a [routerLink]="['/ticket', ocupacion.ticket?.id, 'view']">{{ocupacion.ticket?.id}}</a>
+                    </div>
+                </dd>
+                <dt><span>Entrada</span></dt>
+                <dd>
+                    <div *ngIf="ocupacion.entrada">
+                        <a [routerLink]="['/entrada', ocupacion.entrada?.id, 'view']">{{ocupacion.entrada?.id}}</a>
+                    </div>
+                </dd>
+                <dt><span>Butaca</span></dt>
+                <dd>
+                    <div *ngIf="ocupacion.butaca">
+                        <a [routerLink]="['/butaca', ocupacion.butaca?.id, 'view']">{{ocupacion.butaca?.id}}</a>
+                    </div>
+                </dd>
+                <dt><span>Funcion</span></dt>
+                <dd>
+                    <div *ngIf="ocupacion.funcion">
+                        <a [routerLink]="['/funcion', ocupacion.funcion?.id, 'view']">{{ocupacion.funcion?.id}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/ocupacion', ocupacion.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

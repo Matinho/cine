@@ -1,0 +1,82 @@
+<div>
+    <h2 id="page-heading">
+        <span>Ocupacions</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-ocupacion" [routerLink]="['/ocupacion/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span >
+            Create new Ocupacion
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="table-responsive" *ngIf="ocupacions">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span>ID</span></th>
+            <th><span>Valor</span></th>
+            <th><span>Created</span></th>
+            <th><span>Updated</span></th>
+            <th><span>Ticket</span></th>
+            <th><span>Entrada</span></th>
+            <th><span>Butaca</span></th>
+            <th><span>Funcion</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let ocupacion of ocupacions ;trackBy: trackId">
+                <td><a [routerLink]="['/ocupacion', ocupacion.id, 'view' ]">{{ocupacion.id}}</a></td>
+                <td>{{ocupacion.valor}}</td>
+                <td>{{ocupacion.created | date:'medium'}}</td>
+                <td>{{ocupacion.updated | date:'medium'}}</td>
+                <td>
+                    <div *ngIf="ocupacion.ticket">
+                        <a [routerLink]="['../ticket', ocupacion.ticket?.id, 'view' ]" >{{ocupacion.ticket?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="ocupacion.entrada">
+                        <a [routerLink]="['../entrada', ocupacion.entrada?.id, 'view' ]" >{{ocupacion.entrada?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="ocupacion.butaca">
+                        <a [routerLink]="['../butaca', ocupacion.butaca?.id, 'view' ]" >{{ocupacion.butaca?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="ocupacion.funcion">
+                        <a [routerLink]="['../funcion', ocupacion.funcion?.id, 'view' ]" >{{ocupacion.funcion?.id}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/ocupacion', ocupacion.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/ocupacion', ocupacion.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'ocupacion/'+ ocupacion.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

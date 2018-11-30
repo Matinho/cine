@@ -1,0 +1,115 @@
+DEFAULT_MIN_DOC = 0
+DEFAULT_MAX_DOC = 99999999
+DEFAULT_MIN_LENGTH = 1
+DEFAULT_MAX_LENGTH = 42
+DEFAULT_MIN_DESCRIPTION = 10
+DEFAULT_MAX_DESCRIPTION = 150
+DEFAULT_MIN_TITLE = 1
+DEFAULT_MAX_TITLE = 100
+DEFAULT_UUID = 36
+DEFAULT_MIN_VALORACIDAD = 0
+DEFAULT_MIN_BUTACA = 1
+DEFAULT_BUTACA_LENGTH = 1
+DEFAULT_MIN_VALOR = 0
+
+
+entity Cliente {
+    documento Integer required min(DEFAULT_MIN_DOC) max(DEFAULT_MAX_DOC),
+    apellido String required minlength(DEFAULT_MIN_LENGTH) maxlength(DEFAULT_MAX_LENGTH),
+    nombre String required minlength(DEFAULT_MIN_LENGTH) maxlength(DEFAULT_MAX_LENGTH),
+    created ZonedDateTime required,
+    updated ZonedDateTime required
+}
+
+entity Ticket {
+    fechaTransaccion ZonedDateTime required,
+    butacas Integer required min(DEFAULT_MIN_BUTACA),
+    importe BigDecimal required min(DEFAULT_MIN_VALOR),
+    pagoUuid String required minlength(DEFAULT_UUID) maxlength(DEFAULT_UUID),
+    created ZonedDateTime required,
+    updated ZonedDateTime required
+}
+
+entity Entrada {
+    descripcion String required minlength(DEFAULT_MIN_DESCRIPTION) maxlength(DEFAULT_MAX_DESCRIPTION),
+    valor BigDecimal required min(DEFAULT_MIN_VALOR),
+    created ZonedDateTime required,
+    updated ZonedDateTime required
+}
+
+entity Ocupacion {
+    valor BigDecimal required min(DEFAULT_MIN_VALOR),
+    created ZonedDateTime required,
+    updated ZonedDateTime required
+}
+
+entity Butaca {
+    fila String required minlength(DEFAULT_BUTACA_LENGTH) maxlength(DEFAULT_BUTACA_LENGTH),
+    numero Integer required min(DEFAULT_MIN_BUTACA),
+    descripcion String required minlength(DEFAULT_MIN_DESCRIPTION) maxlength(DEFAULT_MAX_DESCRIPTION),
+    created ZonedDateTime required,
+    updated ZonedDateTime required
+}
+
+entity Sala {
+    descripcion String required minlength(DEFAULT_MIN_DESCRIPTION) maxlength(DEFAULT_MAX_DESCRIPTION),
+    capacidad Integer required min(DEFAULT_MIN_VALORACIDAD),
+    created ZonedDateTime required,
+    updated ZonedDateTime required
+}
+
+entity Funcion {
+    fecha ZonedDateTime required,
+    valor BigDecimal required min(DEFAULT_MIN_VALOR),
+    created ZonedDateTime required,
+    updated ZonedDateTime required
+}
+
+entity Pelicula {
+    titulo String required minlength(DEFAULT_MIN_TITLE) maxlength(DEFAULT_MAX_TITLE),
+    estreno ZonedDateTime required,
+    created ZonedDateTime required,
+    updated ZonedDateTime required
+}
+
+entity Calificacion {
+    descripcion String required minlength(DEFAULT_MIN_DESCRIPTION) maxlength(DEFAULT_MAX_DESCRIPTION),
+    created ZonedDateTime required,
+    updated ZonedDateTime required
+}
+
+relationship OneToMany {
+    Cliente{ticket} to Ticket{cliente}
+}
+
+relationship OneToMany {
+    Ticket{ocupacion} to Ocupacion{ticket}
+}
+
+relationship OneToMany {
+    Entrada{ocupacion} to Ocupacion{entrada}
+}
+
+relationship OneToMany {
+    Butaca{ocupacion} to Ocupacion{butaca}
+}
+
+relationship OneToMany {
+    Funcion{ocupacion} to Ocupacion{funcion}
+}
+
+relationship OneToMany {
+    Pelicula{funcion} to Funcion{pelicula}
+}
+
+relationship OneToMany {
+    Calificacion{pelicula} to Pelicula{calificacion}
+}
+
+relationship OneToMany {
+    Sala{funcion} to Funcion{sala}
+}
+
+relationship OneToMany {
+    Sala{butaca} to Butaca{sala}
+}

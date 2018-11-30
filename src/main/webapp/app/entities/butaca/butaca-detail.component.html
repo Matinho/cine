@@ -1,0 +1,49 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="butaca">
+            <h2><span>Butaca</span> {{butaca.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Fila</span></dt>
+                <dd>
+                    <span>{{butaca.fila}}</span>
+                </dd>
+                <dt><span>Numero</span></dt>
+                <dd>
+                    <span>{{butaca.numero}}</span>
+                </dd>
+                <dt><span>Descripcion</span></dt>
+                <dd>
+                    <span>{{butaca.descripcion}}</span>
+                </dd>
+                <dt><span>Created</span></dt>
+                <dd>
+                    <span>{{butaca.created}}</span>
+                </dd>
+                <dt><span>Updated</span></dt>
+                <dd>
+                    <span>{{butaca.updated}}</span>
+                </dd>
+                <dt><span>Sala</span></dt>
+                <dd>
+                    <div *ngIf="butaca.sala">
+                        <a [routerLink]="['/sala', butaca.sala?.id, 'view']">{{butaca.sala?.id}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/butaca', butaca.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

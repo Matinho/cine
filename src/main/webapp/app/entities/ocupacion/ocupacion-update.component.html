@@ -1,0 +1,105 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-ocupacion-heading">Create or edit a Ocupacion</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!ocupacion.id">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="ocupacion.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_valor">Valor</label>
+                    <input type="number" class="form-control" name="valor" id="field_valor"
+                        [(ngModel)]="ocupacion.valor" required min="0" jhiMin="0"/>
+                    <div [hidden]="!(editForm.controls.valor?.dirty && editForm.controls.valor?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.valor?.errors?.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.valor?.errors?.min">
+                            This field should be at least 0.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.valor?.errors?.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_created">Created</label>
+                    <div class="d-flex">
+                        <input id="field_created" type="datetime-local" class="form-control" name="created" [(ngModel)]="created"
+                        required/>
+                    </div>
+                    <div [hidden]="!(editForm.controls.created?.dirty && editForm.controls.created?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.created?.errors?.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.created?.errors?.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_updated">Updated</label>
+                    <div class="d-flex">
+                        <input id="field_updated" type="datetime-local" class="form-control" name="updated" [(ngModel)]="updated"
+                        required/>
+                    </div>
+                    <div [hidden]="!(editForm.controls.updated?.dirty && editForm.controls.updated?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.updated?.errors?.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.updated?.errors?.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_ticket">Ticket</label>
+                    <select class="form-control" id="field_ticket" name="ticket" [(ngModel)]="ocupacion.ticket" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="ticketOption.id === ocupacion.ticket?.id ? ocupacion.ticket : ticketOption" *ngFor="let ticketOption of tickets; trackBy: trackTicketById">{{ticketOption.id}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_entrada">Entrada</label>
+                    <select class="form-control" id="field_entrada" name="entrada" [(ngModel)]="ocupacion.entrada" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="entradaOption.id === ocupacion.entrada?.id ? ocupacion.entrada : entradaOption" *ngFor="let entradaOption of entradas; trackBy: trackEntradaById">{{entradaOption.id}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_butaca">Butaca</label>
+                    <select class="form-control" id="field_butaca" name="butaca" [(ngModel)]="ocupacion.butaca" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="butacaOption.id === ocupacion.butaca?.id ? ocupacion.butaca : butacaOption" *ngFor="let butacaOption of butacas; trackBy: trackButacaById">{{butacaOption.id}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_funcion">Funcion</label>
+                    <select class="form-control" id="field_funcion" name="funcion" [(ngModel)]="ocupacion.funcion" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="funcionOption.id === ocupacion.funcion?.id ? ocupacion.funcion : funcionOption" *ngFor="let funcionOption of funcions; trackBy: trackFuncionById">{{funcionOption.id}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+{
+    "name": "Sala",
+    "fields": [
+        {
+            "fieldName": "descripcion",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": 10,
+            "fieldValidateRulesMaxlength": 150
+        },
+        {
+            "fieldName": "capacidad",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required",
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldName": "created",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "updated",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "funcion",
+            "otherEntityName": "funcion",
+            "otherEntityRelationshipName": "sala"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "butaca",
+            "otherEntityName": "butaca",
+            "otherEntityRelationshipName": "sala"
+        }
+    ],
+    "changelogDate": "20181108011434",
+    "entityTableName": "sala",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity Ocupacion.
+    -->
+    <changeSet id="20181108011432-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ticket_id"
+                                 baseTableName="ocupacion"
+                                 constraintName="fk_ocupacion_ticket_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ticket"/>
+
+        <addForeignKeyConstraint baseColumnNames="entrada_id"
+                                 baseTableName="ocupacion"
+                                 constraintName="fk_ocupacion_entrada_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="entrada"/>
+
+        <addForeignKeyConstraint baseColumnNames="butaca_id"
+                                 baseTableName="ocupacion"
+                                 constraintName="fk_ocupacion_butaca_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="butaca"/>
+
+        <addForeignKeyConstraint baseColumnNames="funcion_id"
+                                 baseTableName="ocupacion"
+                                 constraintName="fk_ocupacion_funcion_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="funcion"/>
+
+    </changeSet>
+</databaseChangeLog>

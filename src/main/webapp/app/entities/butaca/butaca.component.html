@@ -1,0 +1,68 @@
+<div>
+    <h2 id="page-heading">
+        <span>Butacas</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-butaca" [routerLink]="['/butaca/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span >
+            Create new Butaca
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="table-responsive" *ngIf="butacas">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span>ID</span></th>
+            <th><span>Fila</span></th>
+            <th><span>Numero</span></th>
+            <th><span>Descripcion</span></th>
+            <th><span>Created</span></th>
+            <th><span>Updated</span></th>
+            <th><span>Sala</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let butaca of butacas ;trackBy: trackId">
+                <td><a [routerLink]="['/butaca', butaca.id, 'view' ]">{{butaca.id}}</a></td>
+                <td>{{butaca.fila}}</td>
+                <td>{{butaca.numero}}</td>
+                <td>{{butaca.descripcion}}</td>
+                <td>{{butaca.created | date:'medium'}}</td>
+                <td>{{butaca.updated | date:'medium'}}</td>
+                <td>
+                    <div *ngIf="butaca.sala">
+                        <a [routerLink]="['../sala', butaca.sala?.id, 'view' ]" >{{butaca.sala?.id}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/butaca', butaca.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/butaca', butaca.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'butaca/'+ butaca.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

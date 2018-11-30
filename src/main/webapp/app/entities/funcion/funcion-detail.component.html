@@ -1,0 +1,51 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="funcion">
+            <h2><span>Funcion</span> {{funcion.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Fecha</span></dt>
+                <dd>
+                    <span>{{funcion.fecha}}</span>
+                </dd>
+                <dt><span>Valor</span></dt>
+                <dd>
+                    <span>{{funcion.valor}}</span>
+                </dd>
+                <dt><span>Created</span></dt>
+                <dd>
+                    <span>{{funcion.created}}</span>
+                </dd>
+                <dt><span>Updated</span></dt>
+                <dd>
+                    <span>{{funcion.updated}}</span>
+                </dd>
+                <dt><span>Pelicula</span></dt>
+                <dd>
+                    <div *ngIf="funcion.pelicula">
+                        <a [routerLink]="['/pelicula', funcion.pelicula?.id, 'view']">{{funcion.pelicula?.id}}</a>
+                    </div>
+                </dd>
+                <dt><span>Sala</span></dt>
+                <dd>
+                    <div *ngIf="funcion.sala">
+                        <a [routerLink]="['/sala', funcion.sala?.id, 'view']">{{funcion.sala?.id}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/funcion', funcion.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
