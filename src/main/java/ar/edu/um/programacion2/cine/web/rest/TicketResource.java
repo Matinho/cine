@@ -50,6 +50,7 @@ public class TicketResource {
             throw new BadRequestAlertException("A new ticket cannot already have an ID", ENTITY_NAME, "idexists");
         }
         
+        ticket.setFechaTransaccion(ZonedDateTime.now());
         ticket.setCreated(ZonedDateTime.now());
         ticket.setUpdated(ZonedDateTime.now());
         Ticket result = ticketRepository.save(ticket);
@@ -76,6 +77,7 @@ public class TicketResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         
+        ticket.setFechaTransaccion(ZonedDateTime.now());
         ticket.setUpdated(ZonedDateTime.now());
         Ticket result = ticketRepository.save(ticket);
         

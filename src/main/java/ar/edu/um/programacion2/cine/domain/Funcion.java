@@ -10,7 +10,6 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,7 +31,7 @@ public class Funcion implements Serializable {
 
     @NotNull
     @Column(name = "fecha", nullable = false)
-    private LocalDate fecha;
+    private ZonedDateTime fecha;
 
     @NotNull
     @DecimalMin(value = "0")
@@ -66,16 +65,16 @@ public class Funcion implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getFecha() {
+    public ZonedDateTime getFecha() {
         return fecha;
     }
 
-    public Funcion fecha(LocalDate fecha) {
+    public Funcion fecha(ZonedDateTime fecha) {
         this.fecha = fecha;
         return this;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(ZonedDateTime fecha) {
         this.fecha = fecha;
     }
 

@@ -1,13 +1,21 @@
 package ar.edu.um.programacion2.cine.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+
+import ar.edu.um.programacion2.cine.domain.Butaca;
+import ar.edu.um.programacion2.cine.domain.Entrada;
+import ar.edu.um.programacion2.cine.domain.Funcion;
 import ar.edu.um.programacion2.cine.domain.Ocupacion;
+import ar.edu.um.programacion2.cine.repository.ButacaRepository;
+import ar.edu.um.programacion2.cine.repository.EntradaRepository;
+import ar.edu.um.programacion2.cine.repository.FuncionRepository;
 import ar.edu.um.programacion2.cine.repository.OcupacionRepository;
 import ar.edu.um.programacion2.cine.web.rest.errors.BadRequestAlertException;
 import ar.edu.um.programacion2.cine.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +23,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +39,15 @@ public class OcupacionResource {
     private static final String ENTITY_NAME = "ocupacion";
 
     private final OcupacionRepository ocupacionRepository;
+    
+    @Autowired
+    private FuncionRepository funcionRepository;
+    
+    @Autowired
+    private ButacaRepository butacaRepository;
+    
+    @Autowired
+    private EntradaRepository entradaRepository;
 
     public OcupacionResource(OcupacionRepository ocupacionRepository) {
         this.ocupacionRepository = ocupacionRepository;
@@ -133,4 +151,68 @@ public class OcupacionResource {
         ocupacionRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+    
+    /**
+     * POST  /ocupacions : Create a new ocupacion.
+     *
+     * @return the ResponseEntity with status 201 (Created) and with body the new ocupacion, or with status 400 (Bad Request) if the ocupacion has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/ocupacions/{idFuncion}/{idButacas}/{idEntradas}")
+    @Timed
+    public List<Ocupacion> createOcupacion(@PathVariable Long idFuncion, @PathVariable String idButacas, @PathVariable String idEntradas) throws URISyntaxException {
+        log.debug("REST request to save Ocupacion : {}");
+
+        if (funcionRepository.findById(idFuncion) == null) {
+            throw new BadRequestAlertException("No existe la funcion solicitada", ENTITY_NAME, "idnull");
+        }
+
+        Optional<Funcion> funcion= funcionRepository.findById(idFuncion);
+        String[] butacas = idButacas.split("-");
+        String[] entradas = idEntradas.split("-");
+        List<Ocupacion> ocupacions= new ArrayList<>();
+
+        Iterable<Long> butacas_id = new ArrayList<>();
+        Iterable<Long> entradas_id = new ArrayList<>();
+
+        for(int i = 0;i<butacas.length;i++) {
+            ((ArrayList<Long>) butacas_id).add(Long.parseLong(butacas[i]));
+            ((ArrayList<Long>) entradas_id).add(Long.parseLong(entradas[i]));
+        }
+
+        List<Butaca> butacasList = butacaRepository.findAllById(butacas_id);
+        List<Entrada> entradasList = entradaRepository.findAllById(entradas_id);
+
+        List<Ocupacion> ocupaciones = ocupacionRepository.findAllByFuncionAndButacaNotNull(funcion.get());
+
+        List<Butaca> ocupadas = new ArrayList<>();
+
+        for (int i = 0; i < ocupaciones.size(); i++) {
+            ocupadas.add(ocupaciones.get(i).getButaca());
+        }
+
+        for (int i = 0; i < butacasList.size(); i++) {
+            for (int j = 0; j < ocupadas.size(); j++) {
+                if (butacasList.get(i).equals(ocupadas.get(j))){
+                    throw new BadRequestAlertException("Una butaca solicitada esta ocupada", ENTITY_NAME, "idnull");
+                }
+            }
+        }
+
+        for(int indice = 0;indice<butacasList.size();indice++) {
+            Ocupacion ocupacion=new Ocupacion();
+            ocupacion.setButaca(butacasList.get(indice));
+            ocupacion.setFuncion(funcion.get());
+            ocupacion.setEntrada(entradasList.get(indice));
+            ocupacion.setValor(ocupacion.getEntrada().getValor());
+            ocupacion.setCreated(ZonedDateTime.now());
+            ocupacion.setUpdated(ZonedDateTime.now());
+            ocupacions.add(ocupacion);
+        }
+
+        List<Ocupacion> result_ocupacion = ocupacionRepository.saveAll(ocupacions);
+
+        return result_ocupacion;
+    }
+    
 }

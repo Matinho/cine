@@ -10,7 +10,6 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,9 +29,8 @@ public class Ticket implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @Column(name = "fecha_transaccion", nullable = false)
-    private LocalDate fechaTransaccion;
+    private ZonedDateTime fechaTransaccion;
 
     @NotNull
     @Min(value = 1)
@@ -72,16 +70,16 @@ public class Ticket implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getFechaTransaccion() {
+    public ZonedDateTime getFechaTransaccion() {
         return fechaTransaccion;
     }
 
-    public Ticket fechaTransaccion(LocalDate fechaTransaccion) {
+    public Ticket fechaTransaccion(ZonedDateTime fechaTransaccion) {
         this.fechaTransaccion = fechaTransaccion;
         return this;
     }
 
-    public void setFechaTransaccion(LocalDate fechaTransaccion) {
+    public void setFechaTransaccion(ZonedDateTime fechaTransaccion) {
         this.fechaTransaccion = fechaTransaccion;
     }
 
