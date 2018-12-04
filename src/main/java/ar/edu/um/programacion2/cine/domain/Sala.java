@@ -1,17 +1,26 @@
 package ar.edu.um.programacion2.cine.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Sala.
@@ -37,11 +46,9 @@ public class Sala implements Serializable {
     @Column(name = "capacidad", nullable = false)
     private Integer capacidad;
 
-    @NotNull
     @Column(name = "created", nullable = false)
     private ZonedDateTime created;
 
-    @NotNull
     @Column(name = "updated", nullable = false)
     private ZonedDateTime updated;
 
@@ -49,7 +56,7 @@ public class Sala implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Funcion> funcions = new HashSet<>();
 
-    @OneToMany(mappedBy = "sala")
+    @OneToMany(mappedBy = "sala", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Butaca> butacas = new HashSet<>();
 

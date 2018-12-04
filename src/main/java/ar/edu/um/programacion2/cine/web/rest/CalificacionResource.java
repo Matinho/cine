@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +49,11 @@ public class CalificacionResource {
         if (calificacion.getId() != null) {
             throw new BadRequestAlertException("A new calificacion cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        
+        calificacion.setCreated(ZonedDateTime.now());
+        calificacion.setUpdated(ZonedDateTime.now());
         Calificacion result = calificacionRepository.save(calificacion);
+        
         return ResponseEntity.created(new URI("/api/calificacions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,7 +75,10 @@ public class CalificacionResource {
         if (calificacion.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        
+        calificacion.setUpdated(ZonedDateTime.now());
         Calificacion result = calificacionRepository.save(calificacion);
+        
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, calificacion.getId().toString()))
             .body(result);

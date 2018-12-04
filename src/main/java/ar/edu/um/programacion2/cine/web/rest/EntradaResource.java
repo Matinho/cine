@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +49,11 @@ public class EntradaResource {
         if (entrada.getId() != null) {
             throw new BadRequestAlertException("A new entrada cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        
+        entrada.setCreated(ZonedDateTime.now());
+        entrada.setUpdated(ZonedDateTime.now());
         Entrada result = entradaRepository.save(entrada);
+        
         return ResponseEntity.created(new URI("/api/entradas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,7 +75,10 @@ public class EntradaResource {
         if (entrada.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        
+        entrada.setUpdated(ZonedDateTime.now());
         Entrada result = entradaRepository.save(entrada);
+        
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, entrada.getId().toString()))
             .body(result);

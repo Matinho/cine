@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +49,11 @@ public class ClienteResource {
         if (cliente.getId() != null) {
             throw new BadRequestAlertException("A new cliente cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        
+        cliente.setCreated(ZonedDateTime.now());
+        cliente.setUpdated(ZonedDateTime.now());
         Cliente result = clienteRepository.save(cliente);
+        
         return ResponseEntity.created(new URI("/api/clientes/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,7 +75,10 @@ public class ClienteResource {
         if (cliente.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        
+        cliente.setUpdated(ZonedDateTime.now());
         Cliente result = clienteRepository.save(cliente);
+        
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, cliente.getId().toString()))
             .body(result);

@@ -2,19 +2,22 @@ package ar.edu.um.programacion2.cine.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import ar.edu.um.programacion2.cine.domain.Butaca;
+import ar.edu.um.programacion2.cine.domain.Sala;
 import ar.edu.um.programacion2.cine.repository.ButacaRepository;
+import ar.edu.um.programacion2.cine.repository.SalaRepository;
 import ar.edu.um.programacion2.cine.web.rest.errors.BadRequestAlertException;
 import ar.edu.um.programacion2.cine.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,10 +34,34 @@ public class ButacaResource {
 
     private final ButacaRepository butacaRepository;
 
+    @Autowired
+    private SalaRepository salaRepository;
+    
     public ButacaResource(ButacaRepository butacaRepository) {
         this.butacaRepository = butacaRepository;
     }
 
+    @PostMapping("/butacas/{id_sala}/{butacas}")
+    @Timed
+    public void createButaca(@PathVariable Long id_sala, @PathVariable int butacas) throws URISyntaxException {
+        log.debug("REST request to save Butaca : {}");
+        
+        Optional<Sala> sala = salaRepository.findById(id_sala);
+        String[] filas = {"A", "B", "C", "D", "E"};
+        for (int i = 0; i < 5; i++) {
+            for (int j = 1; j <= (butacas/5); j++) {
+                Butaca butaca = new Butaca();
+                butaca.setCreated(ZonedDateTime.now());
+                butaca.setUpdated(ZonedDateTime.now());
+                butaca.setSala(sala.get());
+                butaca.setFila(filas[i]);
+                butaca.setNumero(j);
+                butaca.setDescripcion("Butaca: S: " + Long.toString(id_sala) + " F: " + filas[i] + " N: " + Integer.toString(j));
+                butacaRepository.save(butaca);
+            }
+        }
+    }
+    
     /**
      * POST  /butacas : Create a new butaca.
      *
@@ -49,7 +76,11 @@ public class ButacaResource {
         if (butaca.getId() != null) {
             throw new BadRequestAlertException("A new butaca cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        
+        butaca.setCreated(ZonedDateTime.now());
+        butaca.setUpdated(ZonedDateTime.now());
         Butaca result = butacaRepository.save(butaca);
+        
         return ResponseEntity.created(new URI("/api/butacas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,7 +102,10 @@ public class ButacaResource {
         if (butaca.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        
+        butaca.setUpdated(ZonedDateTime.now());
         Butaca result = butacaRepository.save(butaca);
+        
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, butaca.getId().toString()))
             .body(result);

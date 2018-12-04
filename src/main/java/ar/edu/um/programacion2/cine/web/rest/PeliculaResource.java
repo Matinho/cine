@@ -1,6 +1,8 @@
 package ar.edu.um.programacion2.cine.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+
+import ar.edu.um.programacion2.cine.domain.Funcion;
 import ar.edu.um.programacion2.cine.domain.Pelicula;
 import ar.edu.um.programacion2.cine.repository.PeliculaRepository;
 import ar.edu.um.programacion2.cine.web.rest.errors.BadRequestAlertException;
@@ -14,9 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * REST controller for managing Pelicula.
@@ -49,7 +52,11 @@ public class PeliculaResource {
         if (pelicula.getId() != null) {
             throw new BadRequestAlertException("A new pelicula cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        
+        pelicula.setCreated(ZonedDateTime.now());
+        pelicula.setUpdated(ZonedDateTime.now());
         Pelicula result = peliculaRepository.save(pelicula);
+        
         return ResponseEntity.created(new URI("/api/peliculas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,7 +78,10 @@ public class PeliculaResource {
         if (pelicula.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        
+        pelicula.setUpdated(ZonedDateTime.now());
         Pelicula result = peliculaRepository.save(pelicula);
+        
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, pelicula.getId().toString()))
             .body(result);
@@ -116,5 +126,20 @@ public class PeliculaResource {
 
         peliculaRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+    
+    /**
+     * GET /peliculas/{id}/funciones
+     * @param id el id de la pelicula a buscar las funciones
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    
+    @GetMapping("/peliculas/{id}/funciones")
+    @Timed
+    public Set<Funcion> getPeliculaFunciones(@PathVariable Long id) {
+        log.debug("REST request to get Funciones de una Pelicula : {}", id);
+        Optional<Pelicula> pelicula = peliculaRepository.findById(id);
+
+        return pelicula.get().getFuncions();
     }
 }

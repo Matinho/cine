@@ -38,11 +38,9 @@ public class Entrada implements Serializable {
     @Column(name = "valor", precision = 10, scale = 2, nullable = false)
     private BigDecimal valor;
 
-    @NotNull
     @Column(name = "created", nullable = false)
     private ZonedDateTime created;
 
-    @NotNull
     @Column(name = "updated", nullable = false)
     private ZonedDateTime updated;
 

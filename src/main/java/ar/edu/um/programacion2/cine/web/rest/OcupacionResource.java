@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +49,20 @@ public class OcupacionResource {
         if (ocupacion.getId() != null) {
             throw new BadRequestAlertException("A new ocupacion cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        
+        // Verificar ocupacion de butacas
+        List<Ocupacion> ocupaciones = ocupacionRepository.findAllByFuncionAndButacaNotNull(ocupacion.getFuncion());
+        
+        for (int i=0; i < ocupaciones.size(); i++) {
+        	if (ocupaciones.get(i).getButaca().equals(ocupacion.getButaca())) {
+        		throw new BadRequestAlertException("No se puede asignar esta butaca porque esta ocupada", ENTITY_NAME, "idexists");
+        	}
+        }
+        
+        ocupacion.setCreated(ZonedDateTime.now());
+        ocupacion.setUpdated(ZonedDateTime.now());
         Ocupacion result = ocupacionRepository.save(ocupacion);
+        
         return ResponseEntity.created(new URI("/api/ocupacions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,7 +84,10 @@ public class OcupacionResource {
         if (ocupacion.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        
+        ocupacion.setUpdated(ZonedDateTime.now());
         Ocupacion result = ocupacionRepository.save(ocupacion);
+        
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ocupacion.getId().toString()))
             .body(result);

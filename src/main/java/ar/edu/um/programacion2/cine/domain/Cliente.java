@@ -43,11 +43,9 @@ public class Cliente implements Serializable {
     @Column(name = "nombre", length = 42, nullable = false)
     private String nombre;
 
-    @NotNull
     @Column(name = "created", nullable = false)
     private ZonedDateTime created;
 
-    @NotNull
     @Column(name = "updated", nullable = false)
     private ZonedDateTime updated;
 

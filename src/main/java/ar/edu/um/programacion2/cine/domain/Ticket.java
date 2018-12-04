@@ -49,11 +49,9 @@ public class Ticket implements Serializable {
     @Column(name = "pago_uuid", length = 36, nullable = false)
     private String pagoUuid;
 
-    @NotNull
     @Column(name = "created", nullable = false)
     private ZonedDateTime created;
 
-    @NotNull
     @Column(name = "updated", nullable = false)
     private ZonedDateTime updated;
 

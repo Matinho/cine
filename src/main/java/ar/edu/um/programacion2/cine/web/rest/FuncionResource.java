@@ -1,22 +1,30 @@
 package ar.edu.um.programacion2.cine.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+
+import ar.edu.um.programacion2.cine.domain.Butaca;
 import ar.edu.um.programacion2.cine.domain.Funcion;
+import ar.edu.um.programacion2.cine.domain.Ocupacion;
+import ar.edu.um.programacion2.cine.repository.ButacaRepository;
 import ar.edu.um.programacion2.cine.repository.FuncionRepository;
+import ar.edu.um.programacion2.cine.repository.OcupacionRepository;
 import ar.edu.um.programacion2.cine.web.rest.errors.BadRequestAlertException;
 import ar.edu.um.programacion2.cine.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * REST controller for managing Funcion.
@@ -30,7 +38,13 @@ public class FuncionResource {
     private static final String ENTITY_NAME = "funcion";
 
     private final FuncionRepository funcionRepository;
+    
+    @Autowired
+    private OcupacionRepository ocupacionRepository;
 
+    @Autowired
+    private ButacaRepository butacaRepository;
+    
     public FuncionResource(FuncionRepository funcionRepository) {
         this.funcionRepository = funcionRepository;
     }
@@ -49,7 +63,11 @@ public class FuncionResource {
         if (funcion.getId() != null) {
             throw new BadRequestAlertException("A new funcion cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        
+        funcion.setCreated(ZonedDateTime.now());
+        funcion.setUpdated(ZonedDateTime.now());
         Funcion result = funcionRepository.save(funcion);
+        
         return ResponseEntity.created(new URI("/api/funcions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,7 +89,10 @@ public class FuncionResource {
         if (funcion.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        
+        funcion.setUpdated(ZonedDateTime.now());
         Funcion result = funcionRepository.save(funcion);
+        
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, funcion.getId().toString()))
             .body(result);
@@ -117,4 +138,49 @@ public class FuncionResource {
         funcionRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+    
+    /**
+     * GET /funcions/{id}/disponibles busca todas las butacas disponibles por funcion
+     * 
+     * @param id el id de funcion
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @GetMapping("/funcions/{id}/disponibles")
+    @Timed
+    public List<Butaca> getAllButacasDisponibles(@PathVariable Long id) {
+        log.debug("Peticion REST de todas las butacas disponibles por funcion : {}", id);
+        
+        Optional<Funcion> funcion = funcionRepository.findById(id);
+        List<Ocupacion> ocupaciones = ocupacionRepository.findAllByFuncionAndButacaNotNull(funcion.get());
+        
+        if(ocupaciones.isEmpty()) {
+        	return butacaRepository.findAllBySala(funcion.get().getSala());
+        }
+        
+        List<Long> ocupadas = new ArrayList<>();
+        
+        for (int i = 0; i < ocupaciones.size(); i++) {
+        	ocupadas.add(ocupaciones.get(i).getButaca().getId());
+        }
+        
+        return butacaRepository.findAllBySalaAndIdNotIn(funcion.get().getSala(), ocupadas);
+    }
+    
+    /**
+     * GET /funcions/{id}/butacas busca todas las butacas
+     * 
+     * @param id el id de funcion
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    
+    @GetMapping("/funcions/{id}/butacas")
+    @Timed
+    public Set<Butaca> getAllButacas(@PathVariable Long id) {
+        log.debug("REST request to get Butacas de una funcion : {}", id);
+
+        Optional<Funcion> funcion = funcionRepository.findById(id);
+
+        return funcion.get().getSala().getButacas();
+    }
+    
 }
