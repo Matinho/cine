@@ -1,5 +1,6 @@
 package ar.edu.um.programacion2.cine.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -51,6 +52,7 @@ public class Ocupacion implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("ocupacions")
+    @JsonIgnore
     private Funcion funcion;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
