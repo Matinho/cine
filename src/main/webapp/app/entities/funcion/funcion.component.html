@@ -13,59 +13,51 @@
     <div class="table-responsive" *ngIf="funcions">
         <table class="table table-striped">
             <thead>
-            <tr>
-            <th><span>ID</span></th>
-            <th><span>Fecha</span></th>
-            <th><span>Valor</span></th>
-            <th><span>Created</span></th>
-            <th><span>Updated</span></th>
-            <th><span>Pelicula</span></th>
-            <th><span>Sala</span></th>
-            <th></th>
-            </tr>
+                <tr>
+                    <th><span>ID</span></th>
+                    <th><span>Fecha</span></th>
+                    <th><span>Valor</span></th>
+                    <th><span>Created</span></th>
+                    <th><span>Updated</span></th>
+                    <th><span>Pelicula</span></th>
+                    <th><span>Sala</span></th>
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let funcion of funcions ;trackBy: trackId">
-                <td><a [routerLink]="['/funcion', funcion.id, 'view' ]">{{funcion.id}}</a></td>
-                <td>{{funcion.fecha | date:'mediumDate'}}</td>
-                <td>{{funcion.valor}}</td>
-                <td>{{funcion.created | date:'medium'}}</td>
-                <td>{{funcion.updated | date:'medium'}}</td>
-                <td>
-                    <div *ngIf="funcion.pelicula">
-                        <a [routerLink]="['../pelicula', funcion.pelicula?.id, 'view' ]" >{{funcion.pelicula?.id}}</a>
-                    </div>
-                </td>
-                <td>
-                    <div *ngIf="funcion.sala">
-                        <a [routerLink]="['../sala', funcion.sala?.id, 'view' ]" >{{funcion.sala?.id}}</a>
-                    </div>
-                </td>
-                <td class="text-right">
-                    <div class="btn-group flex-btn-group-container">
-                        <button type="submit"
-                                [routerLink]="['/funcion', funcion.id, 'view' ]"
-                                class="btn btn-info btn-sm">
+                <tr *ngFor="let funcion of funcions ;trackBy: trackId">
+                    <td><a [routerLink]="['/funcion', funcion.id, 'view' ]">{{funcion.id}}</a></td>
+                    <td>{{funcion.fecha | date:'medium'}}</td>
+                    <td>{{funcion.valor}}</td>
+                    <td>{{funcion.created | date:'medium'}}</td>
+                    <td>{{funcion.updated | date:'medium'}}</td>
+                    <td>
+                        <div *ngIf="funcion.pelicula">
+                            <a [routerLink]="['../pelicula', funcion.pelicula?.id, 'view' ]">{{funcion.pelicula?.id}}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="funcion.sala">
+                            <a [routerLink]="['../sala', funcion.sala?.id, 'view' ]">{{funcion.sala?.id}}</a>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit" [routerLink]="['/funcion', funcion.id, 'view' ]" class="btn btn-info btn-sm">
                             <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline">View</span>
                         </button>
-                        <button type="submit"
-                                [routerLink]="['/funcion', funcion.id, 'edit']"
-                                class="btn btn-primary btn-sm">
+                            <button type="submit" [routerLink]="['/funcion', funcion.id, 'edit']" class="btn btn-primary btn-sm">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline">Edit</span>
                         </button>
-                        <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'funcion/'+ funcion.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
+                            <button type="submit" [routerLink]="['/', { outlets: { popup: 'funcion/'+ funcion.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline">Delete</span>
                         </button>
-                    </div>
-                </td>
-            </tr>
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

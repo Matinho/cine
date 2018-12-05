@@ -52,7 +52,6 @@ public class Ocupacion implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("ocupacions")
-    @JsonIgnore
     private Funcion funcion;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

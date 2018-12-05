@@ -24,7 +24,7 @@ export class FuncionUpdateComponent implements OnInit {
     peliculas: IPelicula[];
 
     salas: ISala[];
-    fechaDp: any;
+    fecha: string;
     created: string;
     updated: string;
 
@@ -61,6 +61,7 @@ export class FuncionUpdateComponent implements OnInit {
 
     save() {
         this.isSaving = true;
+        this.funcion.fecha = moment(this.fecha, DATE_TIME_FORMAT);
         this.funcion.created = moment(this.created, DATE_TIME_FORMAT);
         this.funcion.updated = moment(this.updated, DATE_TIME_FORMAT);
         if (this.funcion.id !== undefined) {
@@ -100,6 +101,7 @@ export class FuncionUpdateComponent implements OnInit {
 
     set funcion(funcion: IFuncion) {
         this._funcion = funcion;
+        this.fecha = moment(funcion.fecha).format(DATE_TIME_FORMAT);
         this.created = moment(funcion.created).format(DATE_TIME_FORMAT);
         this.updated = moment(funcion.updated).format(DATE_TIME_FORMAT);
     }

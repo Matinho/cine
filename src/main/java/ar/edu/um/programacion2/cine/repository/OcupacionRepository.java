@@ -17,5 +17,6 @@ import org.springframework.stereotype.Repository;
 public interface OcupacionRepository extends JpaRepository<Ocupacion, Long> {
 
 	List<Ocupacion> findAllByFuncionAndButacaNotNull(Funcion funcion);
+	List<Ocupacion> findAllByFuncion(Funcion funcion);
 	
 }

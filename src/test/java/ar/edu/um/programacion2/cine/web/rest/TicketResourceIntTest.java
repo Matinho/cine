@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.ZoneOffset;
@@ -46,8 +45,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = CineApp.class)
 public class TicketResourceIntTest {
 
-    private static final LocalDate DEFAULT_FECHA_TRANSACCION = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_FECHA_TRANSACCION = LocalDate.now(ZoneId.systemDefault());
+    private static final ZonedDateTime DEFAULT_FECHA_TRANSACCION = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_FECHA_TRANSACCION = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
     private static final Integer DEFAULT_BUTACAS = 1;
     private static final Integer UPDATED_BUTACAS = 2;

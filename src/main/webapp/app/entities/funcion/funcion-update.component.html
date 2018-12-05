@@ -6,40 +6,33 @@
                 <jhi-alert-error></jhi-alert-error>
                 <div class="form-group" [hidden]="!funcion.id">
                     <label for="id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id"
-                        [(ngModel)]="funcion.id" readonly />
+                    <input type="text" class="form-control" id="id" name="id" [(ngModel)]="funcion.id" readonly />
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_fecha">Fecha</label>
-                    <div class="input-group">
-                        <input id="field_fecha" type="text" class="form-control" name="fecha" ngbDatepicker  #fechaDp="ngbDatepicker" [(ngModel)]="funcion.fecha"
-                        required/>
-                        <span class="input-group-append">
-                            <button type="button" class="btn btn-secondary" (click)="fechaDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
-                        </span>
+                    <div class="d-flex">
+                        <input id="field_fecha" type="datetime-local" class="form-control" name="fecha" [(ngModel)]="funcion.fecha" required/>
                     </div>
-                    <div [hidden]="!(editForm.controls.fecha?.dirty && editForm.controls.fecha?.invalid)">
-                        <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.fecha?.errors?.required">
+                    <div [hidden]="!(editForm.controls.created?.dirty && editForm.controls.created?.invalid)">
+                        <small class="form-text text-danger" [hidden]="!editForm.controls.created?.errors?.required">
                         This field is required.
+                        </small>
+                        <small class="form-text text-danger" [hidden]="!editForm.controls.created?.errors?.ZonedDateTimelocal">
+                            This field should be a date and time.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_valor">Valor</label>
-                    <input type="number" class="form-control" name="valor" id="field_valor"
-                        [(ngModel)]="funcion.valor" required min="0" jhiMin="0"/>
+                    <input type="number" class="form-control" name="valor" id="field_valor" [(ngModel)]="funcion.valor" required min="0" jhiMin="0" />
                     <div [hidden]="!(editForm.controls.valor?.dirty && editForm.controls.valor?.invalid)">
-                        <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.valor?.errors?.required">
+                        <small class="form-text text-danger" [hidden]="!editForm.controls.valor?.errors?.required">
                         This field is required.
                         </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.valor?.errors?.min">
+                        <small class="form-text text-danger" [hidden]="!editForm.controls.valor?.errors?.min">
                             This field should be at least 0.
                         </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.valor?.errors?.number">
+                        <small class="form-text text-danger" [hidden]="!editForm.controls.valor?.errors?.number">
                             This field should be a number.
                         </small>
                     </div>
@@ -47,16 +40,13 @@
                 <div class="form-group">
                     <label class="form-control-label" for="field_created">Created</label>
                     <div class="d-flex">
-                        <input id="field_created" type="datetime-local" class="form-control" name="created" [(ngModel)]="created"
-                        required/>
+                        <input id="field_created" type="datetime-local" class="form-control" name="created" [(ngModel)]="created" required/>
                     </div>
                     <div [hidden]="!(editForm.controls.created?.dirty && editForm.controls.created?.invalid)">
-                        <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.created?.errors?.required">
+                        <small class="form-text text-danger" [hidden]="!editForm.controls.created?.errors?.required">
                         This field is required.
                         </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.created?.errors?.ZonedDateTimelocal">
+                        <small class="form-text text-danger" [hidden]="!editForm.controls.created?.errors?.ZonedDateTimelocal">
                             This field should be a date and time.
                         </small>
                     </div>
@@ -64,16 +54,13 @@
                 <div class="form-group">
                     <label class="form-control-label" for="field_updated">Updated</label>
                     <div class="d-flex">
-                        <input id="field_updated" type="datetime-local" class="form-control" name="updated" [(ngModel)]="updated"
-                        required/>
+                        <input id="field_updated" type="datetime-local" class="form-control" name="updated" [(ngModel)]="updated" required/>
                     </div>
                     <div [hidden]="!(editForm.controls.updated?.dirty && editForm.controls.updated?.invalid)">
-                        <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.updated?.errors?.required">
+                        <small class="form-text text-danger" [hidden]="!editForm.controls.updated?.errors?.required">
                         This field is required.
                         </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.updated?.errors?.ZonedDateTimelocal">
+                        <small class="form-text text-danger" [hidden]="!editForm.controls.updated?.errors?.ZonedDateTimelocal">
                             This field should be a date and time.
                         </small>
                     </div>
@@ -81,21 +68,21 @@
 
                 <div class="form-group">
                     <label class="form-control-label" for="field_pelicula">Pelicula</label>
-                    <select class="form-control" id="field_pelicula" name="pelicula" [(ngModel)]="funcion.pelicula" >
+                    <select class="form-control" id="field_pelicula" name="pelicula" [(ngModel)]="funcion.pelicula">
                         <option [ngValue]="null"></option>
                         <option [ngValue]="peliculaOption.id === funcion.pelicula?.id ? funcion.pelicula : peliculaOption" *ngFor="let peliculaOption of peliculas; trackBy: trackPeliculaById">{{peliculaOption.id}}</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_sala">Sala</label>
-                    <select class="form-control" id="field_sala" name="sala" [(ngModel)]="funcion.sala" >
+                    <select class="form-control" id="field_sala" name="sala" [(ngModel)]="funcion.sala">
                         <option [ngValue]="null"></option>
                         <option [ngValue]="salaOption.id === funcion.sala?.id ? funcion.sala : salaOption" *ngFor="let salaOption of salas; trackBy: trackSalaById">{{salaOption.id}}</option>
                     </select>
                 </div>
             </div>
             <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
                     <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
                 </button>
                 <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
