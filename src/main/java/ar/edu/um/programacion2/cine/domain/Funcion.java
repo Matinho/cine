@@ -1,5 +1,6 @@
 package ar.edu.um.programacion2.cine.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -32,7 +33,6 @@ public class Funcion implements Serializable {
     @Column(name = "fecha", nullable = false)
     private ZonedDateTime fecha;
 
-    @NotNull
     @DecimalMin(value = "0")
     @Column(name = "valor", precision = 10, scale = 2, nullable = false)
     private BigDecimal valor;

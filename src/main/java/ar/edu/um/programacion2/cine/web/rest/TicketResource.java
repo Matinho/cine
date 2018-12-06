@@ -1,13 +1,11 @@
 package ar.edu.um.programacion2.cine.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-
 import ar.edu.um.programacion2.cine.domain.*;
 import ar.edu.um.programacion2.cine.repository.*;
 import ar.edu.um.programacion2.cine.web.rest.errors.BadRequestAlertException;
 import ar.edu.um.programacion2.cine.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +27,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * REST controller for managing Ticket.
- */
 /**
  * REST controller for managing Ticket.
  */
@@ -67,15 +62,26 @@ public class TicketResource {
     /**
      * POST  /tickets : Create a new ticket maquetado.
      *
-  //   * @param ticket the ticket to create
+     * @param ticket the ticket to create
      * @return the ResponseEntity with status 201 (Created) and with body the new ticket, or with status 400 (Bad Request) if the ticket has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @PostMapping("/tickets")
+    @PostMapping("/tickets/{clienteId}")
     @Timed
-    public ResponseEntity<Ticket> createTicket() throws URISyntaxException {
+    public ResponseEntity<Ticket> createTicket(@PathVariable Long clienteId) throws URISyntaxException {
+
+        if (ticketRepository.findById(clienteId).equals(null)){
+            throw new BadRequestAlertException("No existe el cliente", ENTITY_NAME, "idnull");
+        }
+
+        Optional<Cliente> cliente = clienteRepository.findById(clienteId);
 
         Ticket ticket = new Ticket();
+        ticket.setFechaTransaccion(ZonedDateTime.now());
+        ticket.setButacas(1);
+        ticket.setCliente(cliente.get());
+        ticket.setPagoUuid("000000000000000000000000000000000000");
+        ticket.setImporte(BigDecimal.ZERO);
         ticket.setCreated(ZonedDateTime.now());
         ticket.setUpdated(ZonedDateTime.now());
         Ticket result = ticketRepository.save(ticket);
@@ -218,14 +224,15 @@ public class TicketResource {
 
         ticket.get().setCliente(cliente.get());
 
-        URL url = new URL("http://localhost:8090/api/pagos/"+tarjetaNum+"/"+ ticket.get().getImporte().toString());
+        URL url = new URL("http://localhost:8090/api/pagos/" + tarjetaNum + "/" + ticket.get().getImporte().toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Accept", "application/json");
-        conn.setRequestProperty("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTU0NDEwODY4OH0.-pqOfr5g27yMmqsXAxPWy8R8SP5gp6tuzRNMLfbqsXc-SJKSqCWRYMhW2GB4F-dpu2K_gCSgP9jLDuQWX2Z5Rw");
+        conn.setRequestProperty("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTU0NDIwODU4M30.-stdgHsu0MZ6fjOsxzm5o2jO1ild_PZgvuWjDegtV43fBIamcLTZjCUuuIosql3ypcRmxu7qH3X7TvEebSx0wA");
 
         if (conn.getResponseCode() != 200) {
             ocupacionRepository.deleteAll(ocupaciones);
+            ticketRepository.delete(ticket.get());
 
             BufferedReader err = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
             String errorkey = null;

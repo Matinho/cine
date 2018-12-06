@@ -32,9 +32,11 @@ public class Ocupacion implements Serializable {
     @Column(name = "valor", precision = 10, scale = 2, nullable = false)
     private BigDecimal valor;
 
+    @NotNull
     @Column(name = "created", nullable = false)
     private ZonedDateTime created;
 
+    @NotNull
     @Column(name = "updated", nullable = false)
     private ZonedDateTime updated;
 
@@ -52,6 +54,7 @@ public class Ocupacion implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("ocupacions")
+    @JsonIgnore
     private Funcion funcion;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

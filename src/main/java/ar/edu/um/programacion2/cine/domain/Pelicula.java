@@ -1,28 +1,18 @@
 package ar.edu.um.programacion2.cine.domain;
 
-import java.io.Serializable;
-import java.time.ZonedDateTime;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+
+import java.io.Serializable;
+import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Objects;
 
 /**
  * A Pelicula.
@@ -47,9 +37,11 @@ public class Pelicula implements Serializable {
     @Column(name = "estreno", nullable = false)
     private ZonedDateTime estreno;
 
+    @NotNull
     @Column(name = "created", nullable = false)
     private ZonedDateTime created;
 
+    @NotNull
     @Column(name = "updated", nullable = false)
     private ZonedDateTime updated;
 

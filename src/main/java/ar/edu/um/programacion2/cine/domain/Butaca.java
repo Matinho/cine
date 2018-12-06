@@ -43,9 +43,11 @@ public class Butaca implements Serializable {
     @Column(name = "descripcion", length = 150, nullable = false)
     private String descripcion;
 
+    @NotNull
     @Column(name = "created", nullable = false)
     private ZonedDateTime created;
 
+    @NotNull
     @Column(name = "updated", nullable = false)
     private ZonedDateTime updated;
 
@@ -200,5 +202,9 @@ public class Butaca implements Serializable {
             ", created='" + getCreated() + "'" +
             ", updated='" + getUpdated() + "'" +
             "}";
+    }
+
+    public void realizarPago(){
+
     }
 }
