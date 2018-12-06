@@ -40,28 +40,7 @@ public class ButacaResource {
     public ButacaResource(ButacaRepository butacaRepository) {
         this.butacaRepository = butacaRepository;
     }
-
-    @PostMapping("/butacas/{id_sala}/{butacas}")
-    @Timed
-    public void createButaca(@PathVariable Long id_sala, @PathVariable int butacas) throws URISyntaxException {
-        log.debug("REST request to save Butaca : {}");
-        
-        Optional<Sala> sala = salaRepository.findById(id_sala);
-        String[] filas = {"A", "B", "C", "D", "E"};
-        for (int i = 0; i < 5; i++) {
-            for (int j = 1; j <= (butacas/5); j++) {
-                Butaca butaca = new Butaca();
-                butaca.setCreated(ZonedDateTime.now());
-                butaca.setUpdated(ZonedDateTime.now());
-                butaca.setSala(sala.get());
-                butaca.setFila(filas[i]);
-                butaca.setNumero(j);
-                butaca.setDescripcion("Butaca: S: " + Long.toString(id_sala) + " F: " + filas[i] + " N: " + Integer.toString(j));
-                butacaRepository.save(butaca);
-            }
-        }
-    }
-    
+ 
     /**
      * POST  /butacas : Create a new butaca.
      *

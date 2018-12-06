@@ -1,13 +1,17 @@
 package ar.edu.um.programacion2.cine.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+
+import ar.edu.um.programacion2.cine.domain.Butaca;
 import ar.edu.um.programacion2.cine.domain.Sala;
+import ar.edu.um.programacion2.cine.repository.ButacaRepository;
 import ar.edu.um.programacion2.cine.repository.SalaRepository;
 import ar.edu.um.programacion2.cine.web.rest.errors.BadRequestAlertException;
 import ar.edu.um.programacion2.cine.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +34,9 @@ public class SalaResource {
     private static final String ENTITY_NAME = "sala";
 
     private final SalaRepository salaRepository;
+    
+    @Autowired
+    private ButacaRepository butacaRepository;
 
     public SalaResource(SalaRepository salaRepository) {
         this.salaRepository = salaRepository;
@@ -52,12 +59,32 @@ public class SalaResource {
         
         sala.setCreated(ZonedDateTime.now());
         sala.setUpdated(ZonedDateTime.now());
+
         Sala result = salaRepository.save(sala);
-        
+
+        char[] filas = new char[26];
+        for ( int i=0; i<26; i++) {
+            filas[i] = (char) ('A' + i );
+        }
+
+        for (int i = 0; i < (sala.getCapacidad()/10); i++) {
+            for (int j = 1; j <= 10; j++) {
+                Butaca butaca = new Butaca();
+                butaca.setUpdated(ZonedDateTime.now());
+                butaca.setSala(sala);
+                butaca.setCreated(ZonedDateTime.now());
+                butaca.setFila(String.valueOf(filas[i]));
+                butaca.setNumero(j);
+                butaca.setDescripcion("Butaca: S: " + Long.toString(sala.getId()) + " F: " + String.valueOf(filas[i]) + " N: " + Integer.toString(j));
+                butacaRepository.save(butaca);
+            }
+        }
+
         return ResponseEntity.created(new URI("/api/salas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
+    
 
     /**
      * PUT  /salas : Updates an existing sala.

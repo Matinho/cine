@@ -65,7 +65,7 @@ public class TicketResource {
     }
 
     /**
-     * POST  /tickets : Create a new ticket.
+     * POST  /tickets : Create a new ticket maquetado.
      *
   //   * @param ticket the ticket to create
      * @return the ResponseEntity with status 201 (Created) and with body the new ticket, or with status 400 (Bad Request) if the ticket has already an ID
@@ -135,6 +135,9 @@ public class TicketResource {
         ocupacion.setTicket(ticket.get());
         ocupacion.setUpdated(ZonedDateTime.now());
         ocupacionRepository.save(ocupacion);
+        
+        funcion.get().addOcupacion(ocupacion);
+        funcionRepository.save(funcion.get());
 
         ticket.get().addOcupacion(ocupacion);
 
@@ -215,7 +218,7 @@ public class TicketResource {
 
         ticket.get().setCliente(cliente.get());
 
-        URL url = new URL("http://localhost:8090/api/pagos/"+tarjetaNum+"/"+ ticket.get().getImporte().toString());//your url i.e fetch data from .
+        URL url = new URL("http://localhost:8090/api/pagos/"+tarjetaNum+"/"+ ticket.get().getImporte().toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Accept", "application/json");
